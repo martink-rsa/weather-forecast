@@ -1,3 +1,11 @@
+.MainContainer {
+  height: 100vh;
+  background-position: center;
+  background-size: cover;
+}
+
 .App {
+  padding: 20px 0;
   text-align: center;
+  /* background: red; */
 }

@@ -1,5 +1,6 @@
 import { red } from '@material-ui/core/colors';
 import { createMuiTheme } from '@material-ui/core/styles';
+
 // A custom theme for this app
 const theme = createMuiTheme({
   palette: {
@@ -24,8 +25,8 @@ const theme = createMuiTheme({
   overrides: {
     MuiPaper: {
       root: {
-        padding: '20px 10px',
-        margin: '10px',
+        padding: '20px 20px',
+        margin: '20px 0',
         backgroundColor: '#fff', // 5d737e
       },
     },
