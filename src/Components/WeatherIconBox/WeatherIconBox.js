@@ -1,15 +1,7 @@
-// Main Component for Weather Display app
-//    All content will be displayed within this Component
-
-/* eslint-disable react/jsx-one-expression-per-line */
-/* eslint-disable arrow-parens */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,7 +22,7 @@ export default function WeatherIconBox(props) {
   return (
     <div className={classes.root}>
       <img src={icon} className={classes.icon} alt="test" />
-      <Typography variant="h6" color="textPrimary">
+      <Typography variant="h6" color="textPrimary" noWrap>
         {boxTitle}
       </Typography>
       {displayValue.map((item, index) => (

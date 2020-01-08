@@ -5,6 +5,7 @@ import SearchBar from '../SearchBar/SearchBar';
 import WeatherDisplay from '../WeatherDisplay/WeatherDisplay';
 
 export default function WeatherForecast() {
+  const [dataLoaded, setDataloaded] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [userSettings, setUserSettings] = useState({
     unit: 'C',
@@ -21,33 +22,12 @@ export default function WeatherForecast() {
     humidity: 0,
     pressure: 0,
     weather_main: '',
-    weather_desc: '',
+    weather_desc: 'Sunny',
     wind_degree: 0,
     wind_speed: 0,
   });
 
-  /*   const [weather, setWeather] = useState({
-    // Basic info
-    city: '',
-    country: '',
-    // Weather info
-    sunrise: 0,
-    sunset: 0,
-    feels_like: 0,
-    temp: 0,
-    temp_max: 0,
-    temp_min: 0,
-    humidity: 0,
-    pressure: 0,
-    weather_main: '',
-    weather_desc: '',
-  }); */
-
   const fetchWeatherData = async input => {
-    /*     const response = await fetch(
-      `http://api.openweathermap.org/data/2.5/forecast?q=${input}&APPID=222ec06f18abf20c07459862fae44a21`,
-      { mode: 'cors' },
-    ); */
     const response = await fetch(
       `http://api.openweathermap.org/data/2.5/weather?q=${input}&APPID=222ec06f18abf20c07459862fae44a21`,
       { mode: 'cors' },
@@ -79,14 +59,15 @@ export default function WeatherForecast() {
       pressure: weatherData.main.pressure,
       weather_main: weatherData.weather[0].main,
       weather_desc: weatherData.weather[0].description,
+      weather_id: weatherData.weather[0].id,
       wind_degree: weatherData.wind.deg,
       wind_speed: weatherData.wind.speed,
     });
+    setDataloaded(true);
     console.log(weatherData);
   };
 
   const submitSearch = input => {
-    console.log(`submitSearch: ${input}`);
     handleWeatherData(input);
   };
 
@@ -96,8 +77,13 @@ export default function WeatherForecast() {
 
   const handleSubmit = event => {
     event.preventDefault();
-    console.log(`Submit search for: ${searchInput}`);
     submitSearch(searchInput);
+  };
+
+  const changeUserUnit = newUnit => {
+    setUserSettings(prevState => {
+      return { ...prevState, unit: newUnit };
+    });
   };
 
   return (
@@ -110,7 +96,18 @@ export default function WeatherForecast() {
           handleSearchInput={handleSearchInput}
           handleSubmit={handleSubmit}
         />
-        <WeatherDisplay weather={weather} userSettings={userSettings} />
+        {dataLoaded ? (
+          <WeatherDisplay
+            weather={weather}
+            userSettings={userSettings}
+            changeUserUnit={changeUserUnit}
+          />
+        ) : null}
+        {/* <WeatherDisplay
+          weather={weather}
+          userSettings={userSettings}
+          changeUserUnit={changeUserUnit}
+        /> */}
       </div>
     </Container>
   );

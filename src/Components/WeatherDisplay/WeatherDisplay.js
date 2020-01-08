@@ -11,48 +11,53 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
 import Clock from '../Clock/Clock';
+import WeatherIcon from '../WeatherIcon/WeatherIcon';
 import WeatherIconBox from '../WeatherIconBox/WeatherIconBox';
-import SunClouds from './sunclouds.png';
-import Compass from '../../images/icons/compass.svg';
+import TemperatureControl from '../TemperatureControl/TemperatureControl';
 import DropPercentage from '../../images/icons/drop-percentage.svg';
 import Gauge from '../../images/icons/gauge.svg';
 import Sunrise from '../../images/icons/sunrise.svg';
-import Sunset from '../../images/icons/sunset.svg';
 import Wind from '../../images/icons/wind.svg';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     padding: 0,
     margin: 0,
     width: '100%',
-    /* padding: '2px 4px',
-    display: 'flex',
-    alignItems: 'center', */
+    height: '100%',
   },
   paper: {
     padding: 0,
     margin: 0,
-    // backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: 'rgba(255,255,255,0.8)',
   },
   divider: {
     height: 2,
     width: '99%',
     margin: '10px auto',
   },
+  dividerNoTop: {
+    height: 2,
+    width: '99%',
+    margin: 'auto',
+  },
   container: {
-    backgroundColor: 'rgba(255,255,255,0.5)',
+    // backgroundColor: 'rgba(255,255,255,0.5)',
   },
   base: {
     margin: '5px 0',
     padding: '0 5px',
   },
   main: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
     margin: '5px 0',
-    padding: '0 5px',
+    paddingLeft: '30px',
   },
-  city: {
+  topBar: {
     margin: '5px 0 0 0',
-    padding: '0 5px',
+    padding: '0 30px',
   },
   image: {
     height: '100px',
@@ -64,11 +69,39 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    paddingRight: '30px',
+  },
+  mainTemp: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
   },
 }));
 
 export default function WeatherDisplay(props) {
   const classes = useStyles();
+  const { changeUserUnit } = props;
+  const {
+    weather: {
+      city,
+      country,
+      temp,
+      temp_max,
+      temp_min,
+      feels_like,
+      wind_degree,
+      wind_speed,
+      pressure,
+      sunrise,
+      sunset,
+      humidity,
+      weather_desc,
+      weather_id,
+    },
+  } = props;
+  const {
+    userSettings: { unit },
+  } = props;
 
   const displayUnit = {
     C: '℃',
@@ -77,11 +110,11 @@ export default function WeatherDisplay(props) {
   };
 
   const getDate = () => {
+    console.log(new Date().toString());
     return '6 January, 2020';
   };
 
   const capitalize = stringInput => {
-    console.log(stringInput);
     if (stringInput) {
       return stringInput[0].toUpperCase() + stringInput.slice(1);
     }
@@ -89,10 +122,10 @@ export default function WeatherDisplay(props) {
   };
 
   const convertTemp = temp => {
-    if (props.userSettings.unit === 'C') {
-      // return (temp - 32) * (5 / 9);
+    if (unit === 'C') {
       return Math.round(temp - 273.15);
-    } else if (props.userSettings.unit === 'F') {
+    }
+    if (unit === 'F') {
       return Math.round(((temp - 273.15) * 9) / 5 + 32);
     }
     return temp;
@@ -106,16 +139,18 @@ export default function WeatherDisplay(props) {
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <Grid container className={classes.container}>
-          <Grid item xs={12} className={classes.city}>
-            <Typography
-              variant="body1"
-              color="textPrimary"
-              className={classes.city}
-            >
-              {props.weather.city}, {props.weather.country}
+          <Grid item xs={8} className={classes.topBar}>
+            <Typography variant="body1" color="textPrimary">
+              {city}, {country}
             </Typography>
           </Grid>
-          <Divider className={classes.divider} variant="middle" />
+          <Grid item xs={4} align="right">
+            <TemperatureControl
+              currentUnit={unit}
+              changeUserUnit={changeUserUnit}
+            />
+          </Grid>
+          <Divider className={classes.dividerNoTop} variant="middle" />
           <Grid item xs={8} className={classes.main}>
             <Typography variant="h5" color="textPrimary">
               {getDate()}
@@ -124,84 +159,88 @@ export default function WeatherDisplay(props) {
               <Clock />
             </Typography>
             <Typography variant="body1" color="textPrimary">
-              {capitalize(props.weather.weather_desc)}
+              {capitalize(weather_desc)}
             </Typography>
             <Typography variant="body1" color="textPrimary">
-              Feels like: {convertTemp(props.weather.feels_like)}
-              {displayUnit[props.userSettings.unit]}
+              Feels like: {convertTemp(feels_like)}
+              {displayUnit[unit]}
             </Typography>
           </Grid>
           <Grid item xs={4} className={classes.tempContainer}>
-            <img src={SunClouds} className={classes.image} alt="weather" />
-            <Typography variant="h3" color="textPrimary">
-              {convertTemp(props.weather.temp)}
-              {displayUnit[props.userSettings.unit]}
-            </Typography>
-
+            <WeatherIcon weatherID={weather_id} />
+            <Grid className={classes.mainTemp}>
+              <Typography variant="h3" color="textPrimary" display="inline">
+                {convertTemp(temp)}
+              </Typography>
+              <Typography variant="h6" color="textPrimary" display="inline">
+                {displayUnit[unit]}
+              </Typography>
+            </Grid>
             <Typography variant="body1" color="textPrimary">
-              High: {convertTemp(props.weather.temp_max)}
-              {displayUnit[props.userSettings.unit]}
+              High: {convertTemp(temp_max)}
+              {displayUnit[unit]}
             </Typography>
             <Typography variant="body1" color="textPrimary">
-              Low: {convertTemp(props.weather.temp_min)}
-              {displayUnit[props.userSettings.unit]}
+              Low: {convertTemp(temp_min)}
+              {displayUnit[unit]}
             </Typography>
           </Grid>
           <Divider className={classes.divider} variant="middle" />
           <Grid item xs={3}>
             <WeatherIconBox
-              boxTitle={'Wind'}
+              boxTitle="Wind"
               icon={Wind}
-              displayTitle={''}
               displayValue={[
-                props.weather.wind_degree,
-                `${props.weather.wind_speed * 3.6} km/h`,
+                wind_degree,
+                `${Math.round(wind_speed * 3.6 * 100) / 100} km/h`,
               ]}
             />
           </Grid>
           <Grid item xs={3}>
             <WeatherIconBox
-              boxTitle={'Pressure'}
+              boxTitle="Pressure"
               icon={Gauge}
-              displayTitle={''}
-              displayValue={[`${props.weather.pressure / 10} kPA`]}
+              displayValue={[`${pressure / 10} kPA`]}
             />
           </Grid>
           <Grid item xs={3}>
             <WeatherIconBox
-              boxTitle={'Sunrise/Sunset'}
+              boxTitle="Sunrise/Sunset"
               icon={Sunrise}
-              displayTitle={''}
               displayValue={[
-                new Date(props.weather.sunrise * 1000)
-                  .toISOString()
-                  .substr(11, 8),
-                new Date(props.weather.sunset * 1000)
-                  .toISOString()
-                  .substr(11, 8),
+                new Date(sunrise * 1000).toISOString().substr(11, 8),
+                new Date(sunset * 1000).toISOString().substr(11, 8),
               ]}
             />
           </Grid>
           <Grid item xs={3}>
             <WeatherIconBox
-              boxTitle={'Humidity'}
+              boxTitle="Humidity"
               icon={DropPercentage}
-              displayTitle={''}
-              displayValue={[`${props.weather.humidity}%`]}
+              displayValue={[`${humidity}%`]}
             />
-          </Grid>
-          <Divider className={classes.divider} variant="middle" />
-          <Grid item xs={12}>
-            Longitude: {props.weather.longitude}
           </Grid>
         </Grid>
-        <Divider className={classes.divider} variant="middle" />
       </Paper>
     </div>
   );
 }
 
 WeatherDisplay.propTypes = {
-  /*   propString: PropTypes.string.isRequired,
-  propString2: PropTypes.string.isRequired, */
+  weather: PropTypes.shape({
+    city: PropTypes.string.isRequired,
+    country: PropTypes.string.isRequired,
+    temp: PropTypes.number.isRequired,
+    temp_max: PropTypes.number.isRequired,
+    temp_min: PropTypes.number.isRequired,
+    feels_like: PropTypes.number.isRequired,
+    wind_degree: PropTypes.number.isRequired,
+    wind_speed: PropTypes.number.isRequired,
+    pressure: PropTypes.number.isRequired,
+    sunrise: PropTypes.number.isRequired,
+    sunset: PropTypes.number.isRequired,
+    humidity: PropTypes.number.isRequired,
+    weather_desc: PropTypes.string.isRequired,
+    weather_id: PropTypes.number.isRequired,
+  }).isRequired,
 };
