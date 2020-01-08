@@ -8,11 +8,12 @@ import WeatherDisplay from '../WeatherDisplay/WeatherDisplay';
 
 export default function WeatherForecast() {
   const [searchInput, setSearchInput] = useState('');
+  const [userSettings, setUserSettings] = useState({
+    unit: 'C',
+  });
   const [weather, setWeather] = useState({
-    // Basic info
     city: 'Port Elizabeth',
     country: 'ZA',
-    // Weather info
     sunrise: 0,
     sunset: 0,
     feels_like: 0,
@@ -23,6 +24,8 @@ export default function WeatherForecast() {
     pressure: 0,
     weather_main: '',
     weather_desc: '',
+    wind_degree: 0,
+    wind_speed: 0,
   });
 
   /*   const [weather, setWeather] = useState({
@@ -44,7 +47,7 @@ export default function WeatherForecast() {
 
   const fetchWeatherData = async input => {
     /*     const response = await fetch(
-      `http://api.openweathermap.org/data/2.5/forecast?q=${searchInput}&APPID=222ec06f18abf20c07459862fae44a21`,
+      `http://api.openweathermap.org/data/2.5/forecast?q=${input}&APPID=222ec06f18abf20c07459862fae44a21`,
       { mode: 'cors' },
     ); */
     const response = await fetch(
@@ -78,6 +81,8 @@ export default function WeatherForecast() {
       pressure: weatherData.main.pressure,
       weather_main: weatherData.weather[0].main,
       weather_desc: weatherData.weather[0].description,
+      wind_degree: weatherData.wind.deg,
+      wind_speed: weatherData.wind.speed,
     });
     console.log(weatherData);
   };
@@ -107,7 +112,7 @@ export default function WeatherForecast() {
           handleSearchInput={handleSearchInput}
           handleSubmit={handleSubmit}
         />
-        <WeatherDisplay weather={weather} />
+        <WeatherDisplay weather={weather} userSettings={userSettings} />
       </div>
     </Container>
   );

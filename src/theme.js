@@ -1,5 +1,6 @@
 import { red } from '@material-ui/core/colors';
 import { createMuiTheme } from '@material-ui/core/styles';
+import BackgroundImage from './Images/background1.jpeg';
 
 // A custom theme for this app
 const theme = createMuiTheme({
@@ -19,7 +20,8 @@ const theme = createMuiTheme({
       main: red.A400,
     },
     background: {
-      default: '#282c34',
+      default: `url(${BackgroundImage})`,
+      // default: '#282c34',
     },
   },
   overrides: {
@@ -27,7 +29,7 @@ const theme = createMuiTheme({
       root: {
         padding: '20px 20px',
         margin: '20px 0',
-        backgroundColor: '#fff', // 5d737e
+        backgroundColor: 'none', // 5d737e
       },
     },
     MuiButton: {
