@@ -4,8 +4,6 @@ import Typography from '@material-ui/core/Typography';
 import SearchBar from '../SearchBar/SearchBar';
 import WeatherDisplay from '../WeatherDisplay/WeatherDisplay';
 
-// import Background from '../../Images/background1.jpeg';
-
 export default function WeatherForecast() {
   const [searchInput, setSearchInput] = useState('');
   const [userSettings, setUserSettings] = useState({
