@@ -14,10 +14,10 @@ import Clock from '../Clock/Clock';
 import WeatherIcon from '../WeatherIcon/WeatherIcon';
 import WeatherIconBox from '../WeatherIconBox/WeatherIconBox';
 import TemperatureControl from '../TemperatureControl/TemperatureControl';
-import DropPercentage from '../../images/icons/drop-percentage.svg';
-import Gauge from '../../images/icons/gauge.svg';
-import Sunrise from '../../images/icons/sunrise.svg';
-import Wind from '../../images/icons/wind.svg';
+import DropPercentage from '../../images/icons/drop-no-percentage.svg';
+import Gauge from '../../images/icons/gauge-ungraded.svg';
+import Sunrise from '../../images/icons/sunrise-no-arrow.svg';
+import Wind from '../../images/icons/wind-simpler.svg';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -43,6 +43,7 @@ const useStyles = makeStyles(() => ({
   },
   container: {
     // backgroundColor: 'rgba(255,255,255,0.5)',
+    paddingBottom: '15px',
   },
   base: {
     margin: '5px 0',
@@ -135,6 +136,7 @@ export default function WeatherDisplay(props) {
     return 'dir';
   };
 
+  console.log(props.weather);
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -176,13 +178,13 @@ export default function WeatherDisplay(props) {
                 {displayUnit[unit]}
               </Typography>
             </Grid>
-            <Typography variant="body1" color="textPrimary">
+            <Typography variant="body1" color="textSecondary">
               High: {convertTemp(temp_max)}
-              {displayUnit[unit]}
+              {/* {displayUnit[unit]} */}
             </Typography>
-            <Typography variant="body1" color="textPrimary">
+            <Typography variant="body1" color="textSecondary">
               Low: {convertTemp(temp_min)}
-              {displayUnit[unit]}
+              {/* {displayUnit[unit]} */}
             </Typography>
           </Grid>
           <Divider className={classes.divider} variant="middle" />
@@ -207,11 +209,16 @@ export default function WeatherDisplay(props) {
             <WeatherIconBox
               boxTitle="Sunrise/Sunset"
               icon={Sunrise}
+              displayValue={[sunrise, sunset]}
+            />
+            {/*             <WeatherIconBox
+              boxTitle="Sunrise/Sunset"
+              icon={Sunrise}
               displayValue={[
                 new Date(sunrise * 1000).toISOString().substr(11, 8),
                 new Date(sunset * 1000).toISOString().substr(11, 8),
               ]}
-            />
+            /> */}
           </Grid>
           <Grid item xs={3}>
             <WeatherIconBox

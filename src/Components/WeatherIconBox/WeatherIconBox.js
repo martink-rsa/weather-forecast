@@ -11,8 +11,8 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center',
   },
   icon: {
-    height: '30px',
-    width: '30px',
+    height: '25px',
+    width: '25px',
   },
 }));
 
@@ -28,7 +28,7 @@ export default function WeatherIconBox(props) {
       {displayValue.map((item, index) => (
         <Typography
           variant="body1"
-          color="textPrimary"
+          color="textSecondary"
           key={`${boxTitle}${index}`}
         >
           {item}

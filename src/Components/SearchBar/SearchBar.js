@@ -12,7 +12,7 @@ import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    padding: '2px 4px',
+    padding: '0 4px',
     display: 'flex',
     alignItems: 'center',
     backgroundColor: 'rgba(255,255,255,0.8)',
@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
+    paddingLeft: '20px',
   },
   iconButton: {
     padding: 10,
@@ -38,9 +39,9 @@ export default function SearchBar(props) {
   return (
     <form onSubmit={e => handleSubmit(e)}>
       <Paper className={classes.root}>
-        <IconButton className={classes.iconButton} aria-label="menu">
+        {/*         <IconButton className={classes.iconButton} aria-label="menu">
           <MenuIcon />
-        </IconButton>
+        </IconButton> */}
         <InputBase
           className={classes.input}
           placeholder="City, Country Code"

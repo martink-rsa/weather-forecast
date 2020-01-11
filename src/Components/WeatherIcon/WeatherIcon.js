@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-
 import Thunderstorm from '../../images/icons/weather1/11d.png';
 import ShowerRain from '../../images/icons/weather1/09d.png';
 import Rain from '../../images/icons/weather1/10d.png';
@@ -11,7 +11,7 @@ import FewClouds from '../../images/icons/weather1/02d.png';
 import ScatteredClouds from '../../images/icons/weather1/03d.png';
 import BrokenClouds from '../../images/icons/weather1/04d.png';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   icon: {
     padding: 0,
     marginTop: '20px',
@@ -68,3 +68,7 @@ export default function WeatherIcon(props) {
 
   return <img src={icon} alt="weather type" className={classes.icon} />;
 }
+
+WeatherIcon.propTypes = {
+  weatherID: PropTypes.number.isRequired,
+};

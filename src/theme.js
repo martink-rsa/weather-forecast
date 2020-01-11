@@ -25,7 +25,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiPaper: {
       root: {
-        padding: '20px 20px',
+        padding: '0px 20px',
         margin: '20px 0',
         backgroundColor: 'none', // 5d737e
       },

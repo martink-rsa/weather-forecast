@@ -29,12 +29,12 @@ export default function WeatherForecast() {
 
   const fetchWeatherData = async input => {
     const response = await fetch(
-      `http://api.openweathermap.org/data/2.5/weather?q=${input}&APPID=222ec06f18abf20c07459862fae44a21`,
+      `http://api.openweathermap.org/data/2.5/weather?q=${input}&mode=xml&APPID=222ec06f18abf20c07459862fae44a21`,
       { mode: 'cors' },
     );
 
     if (response.status === 200) {
-      return response.json();
+      return response.text();
     }
     // Throw new error here
     console.log('ERROR');
@@ -43,7 +43,43 @@ export default function WeatherForecast() {
   // Take what I want from the data here
   const handleWeatherData = async input => {
     const weatherData = await fetchWeatherData(input);
+    let parser = new DOMParser();
+    let xmlDoc = parser.parseFromString(weatherData, 'text/xml');
+    // console.log(xmlDoc);
+    console.log(xmlDoc.all);
+    // console.log(xmlDoc.all[6].attributes[0].value);
+    console.log(xmlDoc.all[13].attributes.length);
     setWeather({
+      city: xmlDoc.all[1].attributes[1].nodeValue,
+      country: xmlDoc.all[3].textContent,
+      latitude: parseFloat(xmlDoc.all[2].attributes[1].value),
+      longitude: parseFloat(xmlDoc.all[2].attributes[0].value),
+      // Weather info
+      sunrise: xmlDoc.all[5].attributes[0].value,
+      sunset: xmlDoc.all[5].attributes[1].value,
+      feels_like: parseFloat(xmlDoc.all[7].attributes[0].value),
+      temp: parseFloat(xmlDoc.all[6].attributes[0].value),
+      temp_min: parseFloat(xmlDoc.all[6].attributes[1].value),
+      temp_max: parseFloat(xmlDoc.all[6].attributes[2].value),
+      humidity: parseFloat(xmlDoc.all[8].attributes[0].value),
+      pressure: parseFloat(xmlDoc.all[9].attributes[0].value),
+      weather_main: xmlDoc.all[17].attributes[1].value,
+      weather_desc: xmlDoc.all[17].attributes[1].value,
+      weather_id: parseInt(xmlDoc.all[17].attributes[0].value, 10),
+      wind_degree: 123, // DELETE
+      wind_speed: parseFloat(xmlDoc.all[10].children[0].attributes[0].value),
+      wind_name: xmlDoc.all[10].children[0].attributes[2].value,
+      timezone: parseInt(xmlDoc.all[4].textContent, 10) / 60 / 60,
+    });
+
+    if (xmlDoc.all[13].attributes.length > 0) {
+      setWeather({
+        wind_direction: xmlDoc.all[13].attributes[1].value,
+      });
+    }
+
+    setDataloaded(true);
+    /*     setWeather({
       city: weatherData.name,
       country: weatherData.sys.country,
       latitude: weatherData.coord.lat,
@@ -62,9 +98,9 @@ export default function WeatherForecast() {
       weather_id: weatherData.weather[0].id,
       wind_degree: weatherData.wind.deg,
       wind_speed: weatherData.wind.speed,
-    });
-    setDataloaded(true);
-    console.log(weatherData);
+      timezone: weatherData.timezone,
+    }); */
+    // setDataloaded(true);
   };
 
   const submitSearch = input => {
@@ -96,6 +132,11 @@ export default function WeatherForecast() {
           handleSearchInput={handleSearchInput}
           handleSubmit={handleSubmit}
         />
+        {/*         <WeatherDisplay
+          weather={weather}
+          userSettings={userSettings}
+          changeUserUnit={changeUserUnit}
+        /> */}
         {dataLoaded ? (
           <WeatherDisplay
             weather={weather}
@@ -103,11 +144,6 @@ export default function WeatherForecast() {
             changeUserUnit={changeUserUnit}
           />
         ) : null}
-        {/* <WeatherDisplay
-          weather={weather}
-          userSettings={userSettings}
-          changeUserUnit={changeUserUnit}
-        /> */}
       </div>
     </Container>
   );
