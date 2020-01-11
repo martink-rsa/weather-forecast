@@ -90,7 +90,7 @@ export default function WeatherDisplay(props) {
       temp_max,
       temp_min,
       feels_like,
-      wind_degree,
+      wind_direction,
       wind_speed,
       pressure,
       sunrise,
@@ -98,6 +98,7 @@ export default function WeatherDisplay(props) {
       humidity,
       weather_desc,
       weather_id,
+      timezone,
     },
   } = props;
   const {
@@ -112,6 +113,7 @@ export default function WeatherDisplay(props) {
 
   const getDate = () => {
     console.log(new Date().toString());
+    console.log(timezone);
     return '6 January, 2020';
   };
 
@@ -193,8 +195,8 @@ export default function WeatherDisplay(props) {
               boxTitle="Wind"
               icon={Wind}
               displayValue={[
-                wind_degree,
-                `${Math.round(wind_speed * 3.6 * 100) / 100} km/h`,
+                `${Math.round(wind_speed * 3.6 * 100) /
+                  100} km/h ${wind_direction}`,
               ]}
             />
           </Grid>
@@ -241,7 +243,7 @@ WeatherDisplay.propTypes = {
     temp_max: PropTypes.number.isRequired,
     temp_min: PropTypes.number.isRequired,
     feels_like: PropTypes.number.isRequired,
-    wind_degree: PropTypes.number.isRequired,
+    wind_direction: PropTypes.string.isRequired,
     wind_speed: PropTypes.number.isRequired,
     pressure: PropTypes.number.isRequired,
     sunrise: PropTypes.number.isRequired,

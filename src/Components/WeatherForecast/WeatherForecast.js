@@ -73,8 +73,11 @@ export default function WeatherForecast() {
     });
 
     if (xmlDoc.all[13].attributes.length > 0) {
-      setWeather({
-        wind_direction: xmlDoc.all[13].attributes[1].value,
+      setWeather(prevState => {
+        return {
+          ...prevState,
+          wind_direction: xmlDoc.all[13].attributes[1].value,
+        };
       });
     }
 
@@ -132,11 +135,6 @@ export default function WeatherForecast() {
           handleSearchInput={handleSearchInput}
           handleSubmit={handleSubmit}
         />
-        {/*         <WeatherDisplay
-          weather={weather}
-          userSettings={userSettings}
-          changeUserUnit={changeUserUnit}
-        /> */}
         {dataLoaded ? (
           <WeatherDisplay
             weather={weather}
