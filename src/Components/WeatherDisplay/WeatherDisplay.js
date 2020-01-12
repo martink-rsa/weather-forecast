@@ -135,28 +135,27 @@ export default function WeatherDisplay(props) {
     return temp;
   };
 
-  const getWindDirection = direction => {
-    return 'dir';
-  };
-
-  console.log(timezone);
-
-  const getOffsetTime = () => {
+  const getOffsetTime = (timeIn = new Date()) => {
     console.log(timezone);
-    const newTime = moment(new Date())
-      .utc()
-      .utcOffset(timezone / 60)
-      .format('hh:mm');
-    return newTime;
-  };
-
-  const getOTSun = timeIn => {
     const newTime = moment(timeIn)
       .utc()
       .utcOffset(timezone / 60)
-      .format('hh:mm A Z');
+      .format('HH:mm');
     return newTime;
   };
+
+  const getOffsetTimeIn = timeIn => {
+    const newTime = moment
+      .utc(timeIn)
+      .utcOffset(timezone / 60)
+      .format('HH:mm');
+    return newTime;
+  };
+
+  /* console.log(sunrise);
+  console.log(sunset);
+  console.log(getOffsetTime(sunrise));
+  console.log(getOffsetTime(sunset)); */
 
   const getOffsetDate = () => {
     const newDate = moment(new Date())
@@ -165,17 +164,6 @@ export default function WeatherDisplay(props) {
       .format('Do MMMM, YYYY');
     return newDate;
   };
-
-  /*   console.log('---- New time - UTC:');
-  let utcTime = moment.utc().format('HH:MM');
-  console.log(utcTime);
-  console.log(
-    moment()
-      .utcOffset(timezone / 60)
-      .format('HH:MM'),
-  ); */
-
-  // console.log(moment.parseZone(utcTime).utcOffset());
 
   return (
     <div className={classes.root}>
@@ -247,18 +235,10 @@ export default function WeatherDisplay(props) {
           </Grid>
           <Grid item xs={3}>
             <WeatherIconBox
-              boxTitle="Sunrise/Sunset"
+              boxTitle="Sun"
               icon={Sunrise}
-              displayValue={[sunrise, sunset]}
+              displayValue={[getOffsetTimeIn(sunrise), getOffsetTimeIn(sunset)]}
             />
-            {/*             <WeatherIconBox
-              boxTitle="Sunrise/Sunset"
-              icon={Sunrise}
-              displayValue={[
-                new Date(sunrise * 1000).toISOString().substr(11, 8),
-                new Date(sunset * 1000).toISOString().substr(11, 8),
-              ]}
-            /> */}
           </Grid>
           <Grid item xs={3}>
             <WeatherIconBox

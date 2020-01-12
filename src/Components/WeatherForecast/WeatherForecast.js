@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import moment from 'moment';
 import SearchBar from '../SearchBar/SearchBar';
 import WeatherDisplay from '../WeatherDisplay/WeatherDisplay';
+import Loading from '../Loading/Loading';
 
 export default function WeatherForecast() {
   const [dataLoaded, setDataloaded] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [userSettings, setUserSettings] = useState({
     unit: 'C',
@@ -45,6 +46,7 @@ export default function WeatherForecast() {
   // Take what I want from the data here
   const handleWeatherData = async input => {
     setDataloaded(false);
+    setLoading(true);
     const weatherData = await fetchWeatherData(input);
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(weatherData, 'text/xml');
@@ -66,10 +68,8 @@ export default function WeatherForecast() {
       weather_main: xmlDoc.all[17].attributes[1].value,
       weather_desc: xmlDoc.all[17].attributes[1].value,
       weather_id: parseInt(xmlDoc.all[17].attributes[0].value, 10),
-      wind_degree: 123, // DELETE
       wind_speed: parseFloat(xmlDoc.all[10].children[0].attributes[0].value),
       wind_name: xmlDoc.all[10].children[0].attributes[2].value,
-      // timezone: parseInt(xmlDoc.all[4].textContent, 10) / 60 / 60,
       timezone: parseInt(xmlDoc.all[4].textContent, 10),
     });
 
@@ -82,7 +82,10 @@ export default function WeatherForecast() {
       });
     }
 
+    setLoading(false);
     setDataloaded(true);
+
+    // JSON data
     /*     setWeather({
       city: weatherData.name,
       country: weatherData.sys.country,
@@ -104,7 +107,6 @@ export default function WeatherForecast() {
       wind_speed: weatherData.wind.speed,
       timezone: weatherData.timezone,
     }); */
-    // setDataloaded(true);
   };
 
   const submitSearch = input => {
@@ -143,6 +145,7 @@ export default function WeatherForecast() {
             changeUserUnit={changeUserUnit}
           />
         ) : null}
+        {loading ? <Loading /> : null}
       </div>
     </Container>
   );

@@ -1,14 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 
 class Clock extends React.Component {
   constructor(props) {
     super(props);
+    const { timezone } = this.props;
     this.state = {
       time: moment(new Date())
         .utc()
-        .utcOffset(this.props.timezone / 60)
-        .format('hh:mm'),
+        .utcOffset(timezone / 60)
+        .format('HH:mm'),
       timerID: '',
     };
   }
@@ -18,15 +20,17 @@ class Clock extends React.Component {
   }
 
   componentWillUnmount() {
-    window.clearInterval(this.state.timerID);
+    const { timerID } = this.state;
+    window.clearInterval(timerID);
   }
 
   tick = () => {
+    const { timezone } = this.props;
     this.setState({
       time: moment(new Date())
         .utc()
-        .utcOffset(this.props.timezone / 60)
-        .format('hh:mm'),
+        .utcOffset(timezone / 60)
+        .format('HH:mm'),
     });
   };
 
@@ -34,13 +38,17 @@ class Clock extends React.Component {
     const timerID = setInterval(() => {
       this.tick();
     }, 1000);
-    console.log(timerID);
-    this.setState({ timerID: timerID });
+    this.setState({ timerID });
   };
 
   render() {
-    return <span>{this.state.time}</span>;
+    const { time } = this.state;
+    return <span>{time}</span>;
   }
 }
+
+Clock.propTypes = {
+  timezone: PropTypes.number.isRequired,
+};
 
 export default Clock;
