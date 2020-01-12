@@ -4,11 +4,13 @@ import Typography from '@material-ui/core/Typography';
 import SearchBar from '../SearchBar/SearchBar';
 import WeatherDisplay from '../WeatherDisplay/WeatherDisplay';
 import Loading from '../Loading/Loading';
+import Notify from '../Notify/Notify';
 
 export default function WeatherForecast() {
   const [dataLoaded, setDataloaded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchInput, setSearchInput] = useState('');
+  const [notification, setNotification] = useState(false);
   const [userSettings, setUserSettings] = useState({
     unit: 'C',
   });
@@ -41,49 +43,55 @@ export default function WeatherForecast() {
     }
     // Throw new error here
     console.log('ERROR');
+    throw 'error thrown';
   };
 
   // Take what I want from the data here
   const handleWeatherData = async input => {
     setDataloaded(false);
     setLoading(true);
-    const weatherData = await fetchWeatherData(input);
-    let parser = new DOMParser();
-    let xmlDoc = parser.parseFromString(weatherData, 'text/xml');
-    console.log(xmlDoc.all);
-    setWeather({
-      city: xmlDoc.all[1].attributes[1].nodeValue,
-      country: xmlDoc.all[3].textContent,
-      latitude: parseFloat(xmlDoc.all[2].attributes[1].value),
-      longitude: parseFloat(xmlDoc.all[2].attributes[0].value),
-      // Weather info
-      sunrise: xmlDoc.all[5].attributes[0].value,
-      sunset: xmlDoc.all[5].attributes[1].value,
-      feelsLike: parseFloat(xmlDoc.all[7].attributes[0].value),
-      temp: parseFloat(xmlDoc.all[6].attributes[0].value),
-      tempMin: parseFloat(xmlDoc.all[6].attributes[1].value),
-      tempMax: parseFloat(xmlDoc.all[6].attributes[2].value),
-      humidity: parseFloat(xmlDoc.all[8].attributes[0].value),
-      pressure: parseFloat(xmlDoc.all[9].attributes[0].value),
-      weatherMain: xmlDoc.all[17].attributes[1].value,
-      weatherDesc: xmlDoc.all[17].attributes[1].value,
-      weatherID: parseInt(xmlDoc.all[17].attributes[0].value, 10),
-      windSpeed: parseFloat(xmlDoc.all[10].children[0].attributes[0].value),
-      windName: xmlDoc.all[10].children[0].attributes[2].value,
-      timezone: parseInt(xmlDoc.all[4].textContent, 10),
-    });
-
-    if (xmlDoc.all[13].attributes.length > 0) {
-      setWeather(prevState => {
-        return {
-          ...prevState,
-          windDirection: xmlDoc.all[13].attributes[1].value,
-        };
+    try {
+      const weatherData = await fetchWeatherData(input);
+      let parser = new DOMParser();
+      let xmlDoc = parser.parseFromString(weatherData, 'text/xml');
+      setWeather({
+        city: xmlDoc.all[1].attributes[1].nodeValue,
+        country: xmlDoc.all[3].textContent,
+        latitude: parseFloat(xmlDoc.all[2].attributes[1].value),
+        longitude: parseFloat(xmlDoc.all[2].attributes[0].value),
+        // Weather info
+        sunrise: xmlDoc.all[5].attributes[0].value,
+        sunset: xmlDoc.all[5].attributes[1].value,
+        feelsLike: parseFloat(xmlDoc.all[7].attributes[0].value),
+        temp: parseFloat(xmlDoc.all[6].attributes[0].value),
+        tempMin: parseFloat(xmlDoc.all[6].attributes[1].value),
+        tempMax: parseFloat(xmlDoc.all[6].attributes[2].value),
+        humidity: parseFloat(xmlDoc.all[8].attributes[0].value),
+        pressure: parseFloat(xmlDoc.all[9].attributes[0].value),
+        weatherMain: xmlDoc.all[17].attributes[1].value,
+        weatherDesc: xmlDoc.all[17].attributes[1].value,
+        weatherID: parseInt(xmlDoc.all[17].attributes[0].value, 10),
+        windSpeed: parseFloat(xmlDoc.all[10].children[0].attributes[0].value),
+        windName: xmlDoc.all[10].children[0].attributes[2].value,
+        timezone: parseInt(xmlDoc.all[4].textContent, 10),
       });
-    }
 
-    setLoading(false);
-    setDataloaded(true);
+      if (xmlDoc.all[13].attributes.length > 0) {
+        setWeather(prevState => {
+          return {
+            ...prevState,
+            windDirection: xmlDoc.all[13].attributes[1].value,
+          };
+        });
+      }
+
+      setLoading(false);
+      setDataloaded(true);
+    } catch (err) {
+      setNotification(true);
+      setLoading(false);
+      console.log(err);
+    }
 
     // JSON data
     /*     setWeather({
@@ -128,6 +136,11 @@ export default function WeatherForecast() {
     });
   };
 
+  const closeNotification = () => {
+    console.log('closeNotification');
+    setNotification(false);
+  };
+
   return (
     <Container maxWidth="sm" className="App">
       <div className="App">
@@ -147,6 +160,10 @@ export default function WeatherForecast() {
         ) : null}
         {loading ? <Loading /> : null}
       </div>
+      <Notify
+        notification={notification}
+        closeNotification={closeNotification}
+      />
     </Container>
   );
 }

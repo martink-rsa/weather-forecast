@@ -1,8 +1,10 @@
 # Weather Forecast App
 
-Made with React, Material-UI.
+Made with React, Material-UI and Moment.js.
 
-API calls to: []
+API calls to:
+
+OpenWeather
 
 ## How to Run
 
