@@ -33,7 +33,7 @@ export default function WeatherForecast() {
 
   const fetchWeatherData = async input => {
     const response = await fetch(
-      `http://api.openweathermap.org/data/2.5/weather?q=${input}&mode=xml&APPID=222ec06f18abf20c07459862fae44a21`,
+      `https://api.openweathermap.org/data/2.5/weather?q=${input}&mode=xml&APPID=222ec06f18abf20c07459862fae44a21`,
       { mode: 'cors' },
     );
 
