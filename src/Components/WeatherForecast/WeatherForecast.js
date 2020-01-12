@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
+import moment from 'moment';
 import SearchBar from '../SearchBar/SearchBar';
 import WeatherDisplay from '../WeatherDisplay/WeatherDisplay';
 
@@ -11,8 +12,8 @@ export default function WeatherForecast() {
     unit: 'C',
   });
   const [weather, setWeather] = useState({
-    city: 'Port Elizabeth',
-    country: 'ZA',
+    city: '',
+    country: '',
     sunrise: 0,
     sunset: 0,
     feels_like: 0,
@@ -22,9 +23,10 @@ export default function WeatherForecast() {
     humidity: 0,
     pressure: 0,
     weather_main: '',
-    weather_desc: 'Sunny',
+    weather_desc: '',
     wind_degree: 0,
     wind_speed: 0,
+    timezone: 0,
   });
 
   const fetchWeatherData = async input => {
@@ -42,13 +44,11 @@ export default function WeatherForecast() {
 
   // Take what I want from the data here
   const handleWeatherData = async input => {
+    setDataloaded(false);
     const weatherData = await fetchWeatherData(input);
     let parser = new DOMParser();
     let xmlDoc = parser.parseFromString(weatherData, 'text/xml');
-    // console.log(xmlDoc);
     console.log(xmlDoc.all);
-    // console.log(xmlDoc.all[6].attributes[0].value);
-    console.log(xmlDoc.all[13].attributes.length);
     setWeather({
       city: xmlDoc.all[1].attributes[1].nodeValue,
       country: xmlDoc.all[3].textContent,
@@ -69,7 +69,8 @@ export default function WeatherForecast() {
       wind_degree: 123, // DELETE
       wind_speed: parseFloat(xmlDoc.all[10].children[0].attributes[0].value),
       wind_name: xmlDoc.all[10].children[0].attributes[2].value,
-      timezone: parseInt(xmlDoc.all[4].textContent, 10) / 60 / 60,
+      // timezone: parseInt(xmlDoc.all[4].textContent, 10) / 60 / 60,
+      timezone: parseInt(xmlDoc.all[4].textContent, 10),
     });
 
     if (xmlDoc.all[13].attributes.length > 0) {

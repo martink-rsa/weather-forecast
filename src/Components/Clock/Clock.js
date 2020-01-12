@@ -1,38 +1,46 @@
-// Basic clock that displays hh:mm
-// It will tick every minute instead of ticking every second
+import React from 'react';
+import moment from 'moment';
 
-import React, { useState, useEffect } from 'react';
-
-export default function Clock() {
-  const [time, setTime] = useState(
-    new Date().toLocaleString(navigator.language, {
-      hour: '2-digit',
-      minute: '2-digit',
-    }),
-  );
-  const [eventFlag, setEventFlag] = useState(false);
-
-  useEffect(() => {
-    const tick = () => {
-      setTime(
-        new Date().toLocaleString(navigator.language, {
-          hour: '2-digit',
-          minute: '2-digit',
-        }),
-      );
+class Clock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      time: moment(new Date())
+        .utc()
+        .utcOffset(this.props.timezone / 60)
+        .format('hh:mm'),
+      timerID: '',
     };
+  }
 
-    const createTimer = () => {
-      setTimeout(
-        () => setInterval(() => tick(), 60000),
-        (60 - new Date().getSeconds()) * 1000,
-      );
-    };
-    if (!eventFlag) {
-      createTimer();
-      setEventFlag(true);
-    }
-  }, [eventFlag]);
+  componentDidMount() {
+    this.createTimer();
+  }
 
-  return <span>{time}</span>;
+  componentWillUnmount() {
+    window.clearInterval(this.state.timerID);
+  }
+
+  tick = () => {
+    this.setState({
+      time: moment(new Date())
+        .utc()
+        .utcOffset(this.props.timezone / 60)
+        .format('hh:mm'),
+    });
+  };
+
+  createTimer = () => {
+    const timerID = setInterval(() => {
+      this.tick();
+    }, 1000);
+    console.log(timerID);
+    this.setState({ timerID: timerID });
+  };
+
+  render() {
+    return <span>{this.state.time}</span>;
+  }
 }
+
+export default Clock;

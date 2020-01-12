@@ -10,6 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
+import moment from 'moment';
 import Clock from '../Clock/Clock';
 import WeatherIcon from '../WeatherIcon/WeatherIcon';
 import WeatherIconBox from '../WeatherIconBox/WeatherIconBox';
@@ -112,8 +113,8 @@ export default function WeatherDisplay(props) {
   };
 
   const getDate = () => {
-    console.log(new Date().toString());
-    console.log(timezone);
+    // console.log(new Date().toString());
+    // console.log(timezone);
     return '6 January, 2020';
   };
 
@@ -138,7 +139,44 @@ export default function WeatherDisplay(props) {
     return 'dir';
   };
 
-  console.log(props.weather);
+  console.log(timezone);
+
+  const getOffsetTime = () => {
+    console.log(timezone);
+    const newTime = moment(new Date())
+      .utc()
+      .utcOffset(timezone / 60)
+      .format('hh:mm');
+    return newTime;
+  };
+
+  const getOTSun = timeIn => {
+    const newTime = moment(timeIn)
+      .utc()
+      .utcOffset(timezone / 60)
+      .format('hh:mm A Z');
+    return newTime;
+  };
+
+  const getOffsetDate = () => {
+    const newDate = moment(new Date())
+      .utc()
+      .utcOffset(timezone / 60)
+      .format('Do MMMM, YYYY');
+    return newDate;
+  };
+
+  /*   console.log('---- New time - UTC:');
+  let utcTime = moment.utc().format('HH:MM');
+  console.log(utcTime);
+  console.log(
+    moment()
+      .utcOffset(timezone / 60)
+      .format('HH:MM'),
+  ); */
+
+  // console.log(moment.parseZone(utcTime).utcOffset());
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -157,10 +195,10 @@ export default function WeatherDisplay(props) {
           <Divider className={classes.dividerNoTop} variant="middle" />
           <Grid item xs={8} className={classes.main}>
             <Typography variant="h5" color="textPrimary">
-              {getDate()}
+              {getOffsetDate()}
             </Typography>
             <Typography variant="h3" color="textPrimary">
-              <Clock />
+              <Clock timezone={timezone} getOffsetTime={getOffsetTime} />
             </Typography>
             <Typography variant="body1" color="textPrimary">
               {capitalize(weather_desc)}
@@ -246,8 +284,8 @@ WeatherDisplay.propTypes = {
     wind_direction: PropTypes.string.isRequired,
     wind_speed: PropTypes.number.isRequired,
     pressure: PropTypes.number.isRequired,
-    sunrise: PropTypes.number.isRequired,
-    sunset: PropTypes.number.isRequired,
+    // sunrise: PropTypes.number.isRequired,
+    // sunset: PropTypes.number.isRequired,
     humidity: PropTypes.number.isRequired,
     weather_desc: PropTypes.string.isRequired,
     weather_id: PropTypes.number.isRequired,
