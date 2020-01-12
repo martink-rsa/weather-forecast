@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
 import SearchBar from '../SearchBar/SearchBar';
 import WeatherDisplay from '../WeatherDisplay/WeatherDisplay';
 import Loading from '../Loading/Loading';
@@ -42,8 +41,6 @@ export default function WeatherForecast() {
       return response.text();
     }
     // Throw new error here
-    console.log('ERROR');
-    throw 'error thrown';
   };
 
   // Take what I want from the data here
@@ -90,7 +87,6 @@ export default function WeatherForecast() {
     } catch (err) {
       setNotification(true);
       setLoading(false);
-      console.log(err);
     }
 
     // JSON data
@@ -137,7 +133,6 @@ export default function WeatherForecast() {
   };
 
   const closeNotification = () => {
-    console.log('closeNotification');
     setNotification(false);
   };
 
