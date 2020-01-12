@@ -17,16 +17,16 @@ export default function WeatherForecast() {
     country: '',
     sunrise: 0,
     sunset: 0,
-    feels_like: 0,
+    feelsLike: 0,
     temp: 0,
-    temp_max: 0,
-    temp_min: 0,
+    tempMax: 0,
+    tempMin: 0,
     humidity: 0,
     pressure: 0,
-    weather_main: '',
-    weather_desc: '',
-    wind_degree: 0,
-    wind_speed: 0,
+    weatherMain: '',
+    weatherDesc: '',
+    windDegree: 0,
+    windSpeed: 0,
     timezone: 0,
   });
 
@@ -59,17 +59,17 @@ export default function WeatherForecast() {
       // Weather info
       sunrise: xmlDoc.all[5].attributes[0].value,
       sunset: xmlDoc.all[5].attributes[1].value,
-      feels_like: parseFloat(xmlDoc.all[7].attributes[0].value),
+      feelsLike: parseFloat(xmlDoc.all[7].attributes[0].value),
       temp: parseFloat(xmlDoc.all[6].attributes[0].value),
-      temp_min: parseFloat(xmlDoc.all[6].attributes[1].value),
-      temp_max: parseFloat(xmlDoc.all[6].attributes[2].value),
+      tempMin: parseFloat(xmlDoc.all[6].attributes[1].value),
+      tempMax: parseFloat(xmlDoc.all[6].attributes[2].value),
       humidity: parseFloat(xmlDoc.all[8].attributes[0].value),
       pressure: parseFloat(xmlDoc.all[9].attributes[0].value),
-      weather_main: xmlDoc.all[17].attributes[1].value,
-      weather_desc: xmlDoc.all[17].attributes[1].value,
-      weather_id: parseInt(xmlDoc.all[17].attributes[0].value, 10),
-      wind_speed: parseFloat(xmlDoc.all[10].children[0].attributes[0].value),
-      wind_name: xmlDoc.all[10].children[0].attributes[2].value,
+      weatherMain: xmlDoc.all[17].attributes[1].value,
+      weatherDesc: xmlDoc.all[17].attributes[1].value,
+      weatherID: parseInt(xmlDoc.all[17].attributes[0].value, 10),
+      windSpeed: parseFloat(xmlDoc.all[10].children[0].attributes[0].value),
+      windName: xmlDoc.all[10].children[0].attributes[2].value,
       timezone: parseInt(xmlDoc.all[4].textContent, 10),
     });
 
@@ -77,7 +77,7 @@ export default function WeatherForecast() {
       setWeather(prevState => {
         return {
           ...prevState,
-          wind_direction: xmlDoc.all[13].attributes[1].value,
+          windDirection: xmlDoc.all[13].attributes[1].value,
         };
       });
     }
@@ -131,9 +131,9 @@ export default function WeatherForecast() {
   return (
     <Container maxWidth="sm" className="App">
       <div className="App">
-        <Typography variant="h4" color="textPrimary" align="center">
+        {/* <Typography variant="h6" color="textPrimary" align="center">
           Weather Forecast
-        </Typography>
+        </Typography> */}
         <SearchBar
           handleSearchInput={handleSearchInput}
           handleSubmit={handleSubmit}

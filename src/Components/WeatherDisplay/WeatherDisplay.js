@@ -33,17 +33,16 @@ const useStyles = makeStyles(() => ({
     backgroundColor: 'rgba(255,255,255,0.8)',
   },
   divider: {
-    height: 2,
+    height: 1,
     width: '99%',
     margin: '10px auto',
   },
   dividerNoTop: {
-    height: 2,
-    width: '99%',
+    height: 1,
+    width: '98%',
     margin: 'auto',
   },
   container: {
-    // backgroundColor: 'rgba(255,255,255,0.5)',
     paddingBottom: '15px',
   },
   base: {
@@ -88,17 +87,17 @@ export default function WeatherDisplay(props) {
       city,
       country,
       temp,
-      temp_max,
-      temp_min,
-      feels_like,
-      wind_direction,
-      wind_speed,
+      tempMax,
+      tempMin,
+      feelsLike,
+      windDirection,
+      windSpeed,
       pressure,
       sunrise,
       sunset,
       humidity,
-      weather_desc,
-      weather_id,
+      weatherDesc,
+      weatherID,
       timezone,
     },
   } = props;
@@ -110,12 +109,6 @@ export default function WeatherDisplay(props) {
     C: '℃',
     F: '℉',
     K: 'K',
-  };
-
-  const getDate = () => {
-    // console.log(new Date().toString());
-    // console.log(timezone);
-    return '6 January, 2020';
   };
 
   const capitalize = stringInput => {
@@ -136,26 +129,11 @@ export default function WeatherDisplay(props) {
   };
 
   const getOffsetTime = (timeIn = new Date()) => {
-    console.log(timezone);
-    const newTime = moment(timeIn)
-      .utc()
-      .utcOffset(timezone / 60)
-      .format('HH:mm');
-    return newTime;
-  };
-
-  const getOffsetTimeIn = timeIn => {
-    const newTime = moment
+    return moment
       .utc(timeIn)
       .utcOffset(timezone / 60)
       .format('HH:mm');
-    return newTime;
   };
-
-  /* console.log(sunrise);
-  console.log(sunset);
-  console.log(getOffsetTime(sunrise));
-  console.log(getOffsetTime(sunset)); */
 
   const getOffsetDate = () => {
     const newDate = moment(new Date())
@@ -188,16 +166,16 @@ export default function WeatherDisplay(props) {
             <Typography variant="h3" color="textPrimary">
               <Clock timezone={timezone} getOffsetTime={getOffsetTime} />
             </Typography>
-            <Typography variant="body1" color="textPrimary">
-              {capitalize(weather_desc)}
+            <Typography variant="body1" color="textSecondary">
+              {capitalize(weatherDesc)}
             </Typography>
-            <Typography variant="body1" color="textPrimary">
-              Feels like: {convertTemp(feels_like)}
+            <Typography variant="body1" color="textSecondary">
+              Feels like: {convertTemp(feelsLike)}
               {displayUnit[unit]}
             </Typography>
           </Grid>
           <Grid item xs={4} className={classes.tempContainer}>
-            <WeatherIcon weatherID={weather_id} />
+            <WeatherIcon weatherID={weatherID} />
             <Grid className={classes.mainTemp}>
               <Typography variant="h3" color="textPrimary" display="inline">
                 {convertTemp(temp)}
@@ -207,11 +185,11 @@ export default function WeatherDisplay(props) {
               </Typography>
             </Grid>
             <Typography variant="body1" color="textSecondary">
-              High: {convertTemp(temp_max)}
+              High: {convertTemp(tempMax)}
               {/* {displayUnit[unit]} */}
             </Typography>
             <Typography variant="body1" color="textSecondary">
-              Low: {convertTemp(temp_min)}
+              Low: {convertTemp(tempMin)}
               {/* {displayUnit[unit]} */}
             </Typography>
           </Grid>
@@ -221,8 +199,8 @@ export default function WeatherDisplay(props) {
               boxTitle="Wind"
               icon={Wind}
               displayValue={[
-                `${Math.round(wind_speed * 3.6 * 100) /
-                  100} km/h ${wind_direction}`,
+                `${Math.round(windSpeed * 3.6 * 100) /
+                  100} km/h ${windDirection}`,
               ]}
             />
           </Grid>
@@ -237,7 +215,7 @@ export default function WeatherDisplay(props) {
             <WeatherIconBox
               boxTitle="Sun"
               icon={Sunrise}
-              displayValue={[getOffsetTimeIn(sunrise), getOffsetTimeIn(sunset)]}
+              displayValue={[getOffsetTime(sunrise), getOffsetTime(sunset)]}
             />
           </Grid>
           <Grid item xs={3}>
@@ -258,16 +236,16 @@ WeatherDisplay.propTypes = {
     city: PropTypes.string.isRequired,
     country: PropTypes.string.isRequired,
     temp: PropTypes.number.isRequired,
-    temp_max: PropTypes.number.isRequired,
-    temp_min: PropTypes.number.isRequired,
-    feels_like: PropTypes.number.isRequired,
-    wind_direction: PropTypes.string.isRequired,
-    wind_speed: PropTypes.number.isRequired,
+    tempMax: PropTypes.number.isRequired,
+    tempMin: PropTypes.number.isRequired,
+    feelsLike: PropTypes.number.isRequired,
+    windDirection: PropTypes.string.isRequired,
+    windSpeed: PropTypes.number.isRequired,
     pressure: PropTypes.number.isRequired,
-    // sunrise: PropTypes.number.isRequired,
-    // sunset: PropTypes.number.isRequired,
+    sunrise: PropTypes.string.isRequired,
+    sunset: PropTypes.string.isRequired,
     humidity: PropTypes.number.isRequired,
-    weather_desc: PropTypes.string.isRequired,
-    weather_id: PropTypes.number.isRequired,
+    weatherDesc: PropTypes.string.isRequired,
+    weatherID: PropTypes.number.isRequired,
   }).isRequired,
 };
