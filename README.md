@@ -1,12 +1,22 @@
 # Weather Forecast App
 
-Made with React, Material-UI and Moment.js.
+Get the weather for your city of choice.
 
-API calls to:
+![image](https://user-images.githubusercontent.com/52622303/80315712-a864b480-87f9-11ea-89b7-55c83da26b33.png)
 
-OpenWeather
+### Installing and running the app
 
-## How to Run
+1. Clone the repo.
+2. `npm install` to install the app and dependencies
+3. `npm start` to start the app
 
-`npm install`
-`npm start`
+## Running the tests
+
+Run `jest test` to run the tests
+
+## Built With
+
+* [React](https://reactjs.org/) - The web framework used
+* [Material-UI](https://material-ui.com/) - Dependency Management
+* [Moment.js](https://momentjs.com/) - Used to generate RSS Feeds
+* [OpenWeather](https://openweathermap.org/) - API calls
